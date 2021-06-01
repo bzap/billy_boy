@@ -18,6 +18,14 @@ class music_controller():
     def add_to_queue(self, song): 
         self.song_queue.append(song) 
 
+
+    def get_queue_size(self): 
+        return len(self.song_queue)
+
+    def stop_music(self): 
+        self.vc.stop()
+
+
     def get_info(self, info): 
         yt = YoutubeDL({'format': 'bestaudio', 'noplaylist':'True', 'match_filter' : '!is_live'})
         try: 
@@ -31,6 +39,7 @@ class music_controller():
         return self.song_info
         
     def next_song(self): 
+        print(self.song_queue)
         if len(self.song_queue) > 0 and self.vc.is_connected():
             self.state = True 
             url = self.song_queue[0][0]
@@ -40,16 +49,19 @@ class music_controller():
             self.state = False 
 
     async def play_song(self, ctx, client): 
+        
         if (len(self.song_queue) > 0): 
             self.state = True 
             url = self.song_queue[0][0]
-
-            if (ctx.voice_client): 
+            print(len(self.song_queue))
+            if (ctx.voice_client and len(self.song_queue) <= 1): 
                 await ctx.guild.voice_client.disconnect()
+
 
             if (ctx.author.voice):
                 channel = ctx.author.voice.channel 
                 self.vc = await channel.connect()
+                self.song_queue.pop(0)
                 self.vc.play(discord.FFmpegPCMAudio(url, **self.FFMPEG_OPTIONS), after=lambda e: self.next_song())
             else: 
                 await ctx.send("pls join a voice channel to use this this xoxo")

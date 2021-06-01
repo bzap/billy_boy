@@ -11,9 +11,8 @@ TOKEN = 'ODQ5MTIzMzg4NTY2Nzk4MzY4.YLWlxw.pyJX_ePIxIP9ynOAWQHijndJ450'
 client = commands.Bot(command_prefix="#")
 
 song_queue = {} 
-
-
-
+controller = music_controller()
+command_count = 0 
 
 @client.event
 async def on_ready():
@@ -23,12 +22,26 @@ async def on_ready():
             
 @client.command()
 async def play(ctx, arg):
-        controller = music_controller() 
         content = controller.get_info(arg) 
+          #  if controller.get_queue_size() > 1: 
+          #      ctx.send('added to queue')
         controller.add_to_queue(content) 
         if not(controller.check_state()):
             print('gothere') 
             await controller.play_song(ctx, client)
+
+@client.command()
+async def skip(ctx):
+        if (controller.check_state()):
+            controller.stop_music()
+            await controller.play_song(ctx, client)     
+
+
+#@client.command()
+#async def stop(ctx):
+#        if (controller.check_state()):
+#            controller.stop_music()
+#            await controller.play_song(ctx, client)     
 
 
 
