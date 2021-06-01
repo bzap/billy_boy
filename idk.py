@@ -1,8 +1,8 @@
 import discord 
-import praw 
+import asyncpraw 
+import asyncio
 
-
-reddit = praw.Reddit(client_id='9bfw125sbnQY9Q', client_secret='dX7Xnh1xDJVKaLqAm4dgobmim68S6w', user_agent='my_user_agent')
+reddit = asyncpraw.Reddit(client_id='9bfw125sbnQY9Q', client_secret='dX7Xnh1xDJVKaLqAm4dgobmim68S6w', user_agent='my_user_agent')
 
 
 #hot_posts = reddit.subreddit('SamsungGirlr34').hot(limit=10)
@@ -10,11 +10,13 @@ reddit = praw.Reddit(client_id='9bfw125sbnQY9Q', client_secret='dX7Xnh1xDJVKaLqA
 #    print(post.url)
 
 post_info = []
-def get_newest(): 
-    newest = reddit.subreddit('SamsungGirlr34').new(limit=1)
-    for post in newest: 
-        #print(post.url)
-        if (post.url.endswith('jpg') or post.url.endswith('png') == True): 
+async def get_newest():
+
+    newest1 = await reddit.subreddit('SamsungGirlr34')
+    newest = newest1.new(limit=1)
+    async for post in newest: 
+        print(post.url)
+        if (post.url.endswith('jpg') or post.url.endswith('png')): 
             print(post.url)
             post_info.append([post.url, post.title])
             return post_info 
@@ -23,16 +25,22 @@ def get_newest():
             return post_info 
 
 
-def get_top(): 
-    current_top = reddit.subreddit('SamsungGirlr34').top(limit=1)
-    for post in current_top: 
-        #print(post.url)
-        if (post.url.endswith('jpg') or post.url.endswith('png') == True): 
+async def get_top(): 
+    current_top1 = await reddit.subreddit('SamsungGirlr34')
+    current_top = current_top1.top(limit=1)
+   #subreddit = await reddit.subreddit("SamsungGirlr34")
+    async for post in current_top: 
+        print(post.url)
+        
+        if (post.url.endswith('jpg') or post.url.endswith('png')): 
             print(post.url)
             post_info.append([post.url, post.title, post.author.name])
             return post_info 
         else: 
             post_info.append([post.body, post.title, post.author.name])
             return post_info 
+         
 
-print(get_top())
+#loop = asyncio.get_event_loop()
+#loop.run_until_complete(get_top())
+

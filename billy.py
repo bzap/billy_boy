@@ -37,15 +37,18 @@ async def play(ctx, arg):
 @client.command()
 async def bill(ctx, arg):
         if (arg == 'top'): 
-            content = get_top() 
+            content = await get_top() 
             print(content)
+            print('i got here')
             embed=discord.Embed(title=content[0][1], url=content[0][0], description='u/' + content[0][2], color=0xFF5733)
             embed.set_image(url=content[0][0])
             await ctx.send(embed=embed)           
 
         elif (arg == 'new'): 
-            content = get_newest()  
+            content = await get_newest()  
+            
             embed=discord.Embed(title=content[0][1], url=content[0][0], description="This is an embed that will show how to build an embed and the different components", image=content[0][0], color=0xFF5733)
+            embed.set_image(url=content[0][0])
             await ctx.send(embed=embed)       
 
 
