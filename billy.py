@@ -42,10 +42,10 @@ async def sam(ctx, arg):
             if (content[0][0].endswith('jpg') or content[0][0].endswith('png')): 
                 embed=discord.Embed(title=content[0][1], url=content[0][0], color=0xFF5733)
                 embed.set_image(url=content[0][0])
-                embed.set_author(name='u/' + content[0][2])
+                embed.set_footer(text='u/' + content[0][2])
             else: 
                 embed=discord.Embed(title=content[0][1], description=content[0][0], color=0xFF5733)
-                embed.set_author(name='u/' + content[0][2])
+                embed.set_footer(text='u/' + content[0][2])
             await ctx.send(embed=embed)         
   
 
@@ -54,10 +54,10 @@ async def sam(ctx, arg):
             if (content[0][0].endswith('jpg') or content[0][0].endswith('png')): 
                 embed=discord.Embed(title=content[0][1], url=content[0][0], color=0xFF5733)
                 embed.set_image(url=content[0][0])
-                embed.set_author(name='u/' + content[0][2])
+                embed.set_footer(text='u/' + content[0][2])
             else: 
                 embed=discord.Embed(title=content[0][1], description=content[0][0], color=0xFF5733)
-                embed.set_author(name='u/' + content[0][2])
+                embed.set_footer(text='u/' + content[0][2])
             await ctx.send(embed=embed)       
 
 @client.command()
