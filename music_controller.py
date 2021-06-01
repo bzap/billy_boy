@@ -33,13 +33,8 @@ class music_controller():
     def next_song(self): 
         if len(self.music_queue) > 0:
             self.state = True 
-
             url = self.song_queue[0][0]
-
-
-            self.vc.play(discord.FFmpegPCMAudio(url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
             self.song_queue.pop(0)
-
         else: 
             self.state = False 
 
@@ -47,17 +42,12 @@ class music_controller():
         if (len(self.song_queue) > 0): 
             self.state = True 
             url = self.song_queue[0][0]
-            print(ctx.author.voice.channel)
-            self.vc = discord.utils.get(ctx.guild.voice_channels, name='General')
-            print(self.vc)
-
-
-            print('2354234324')
+            print("LOLOlolOLl")
+            print(type(ctx.author.voice.channel))
+            self.vc = discord.utils.get(ctx.guild.voice_channels, name=str(ctx.author.voice.channel))
             await self.vc.connect() 
             voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
             voice.play(discord.FFmpegPCMAudio(url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
-
-
         else: 
             self.state = False 
 

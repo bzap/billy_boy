@@ -34,23 +34,30 @@ async def play(ctx, arg):
             await controller.play_song(ctx, client)
 
 
+
 @client.command()
 async def sam(ctx, arg):
         if (arg == 'top'): 
             content = await get_top() 
-            print(content)
-            print('i got here')
-            embed=discord.Embed(title=content[0][1], url=content[0][0], description='u/' + content[0][2], color=0xFF5733)
-            embed.set_image(url=content[0][0])
-            await ctx.send(embed=embed)           
+            if (content[0][0].endswith('jpg') or content[0][0].endswith('png')): 
+                embed=discord.Embed(title=content[0][1], url=content[0][0], color=0xFF5733)
+                embed.set_image(url=content[0][0])
+                embed.set_author(name='u/' + content[0][2])
+            else: 
+                embed=discord.Embed(title=content[0][1], description=content[0][0], color=0xFF5733)
+                embed.set_author(name='u/' + content[0][2])
+            await ctx.send(embed=embed)         
+  
 
         elif (arg == 'new'): 
             content = await get_newest()  
             if (content[0][0].endswith('jpg') or content[0][0].endswith('png')): 
-                embed=discord.Embed(title=content[0][1], url=content[0][0], description='u/' + content[0][2], color=0xFF5733)
+                embed=discord.Embed(title=content[0][1], url=content[0][0], color=0xFF5733)
                 embed.set_image(url=content[0][0])
+                embed.set_author(name='u/' + content[0][2])
             else: 
                 embed=discord.Embed(title=content[0][1], description=content[0][0], color=0xFF5733)
+                embed.set_author(name='u/' + content[0][2])
             await ctx.send(embed=embed)       
 
 @client.command()
