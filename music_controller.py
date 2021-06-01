@@ -31,10 +31,11 @@ class music_controller():
         return self.song_info
         
     def next_song(self): 
-        if len(self.music_queue) > 0:
+        if len(self.song_queue) > 0 and self.vc.is_connected():
             self.state = True 
             url = self.song_queue[0][0]
             self.song_queue.pop(0)
+            self.vc.play(discord.FFmpegPCMAudio(url, **self.FFMPEG_OPTIONS), after=lambda e: self.next_song())
         else: 
             self.state = False 
 
@@ -42,12 +43,27 @@ class music_controller():
         if (len(self.song_queue) > 0): 
             self.state = True 
             url = self.song_queue[0][0]
-            print("LOLOlolOLl")
-            print(type(ctx.author.voice.channel))
-            self.vc = discord.utils.get(ctx.guild.voice_channels, name=str(ctx.author.voice.channel))
-            await self.vc.connect() 
-            voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
-            voice.play(discord.FFmpegPCMAudio(url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
+
+            if (ctx.voice_client): 
+                await ctx.guild.voice_client.disconnect()
+
+            if (ctx.author.voice):
+                channel = ctx.author.voice.channel 
+                self.vc = await channel.connect()
+                self.vc.play(discord.FFmpegPCMAudio(url, **self.FFMPEG_OPTIONS), after=lambda e: self.next_song())
+            else: 
+                await ctx.send("pls join a voice channel to use this this xoxo")
+
+            #if self.vc != '' or self.vc != None: 
+            #    self.vc = await discord.utils.get(ctx.guild.voice_channels, name=str(ctx.author.voice.channel)).disconnect()
+
+            #elif self.vc == "" or not self.vc.is_connected() or self.vc == None:
+            #    self.vc = await discord.utils.get(ctx.guild.voice_channels, name=str(ctx.author.voice.channel)).connect()
+            #voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
+            #if (voice.is_connected()):
+            #    voice.play(discord.FFmpegPCMAudio(url, **self.FFMPEG_OPTIONS), after=lambda e: self.next_song(voice))
+            #elif(self.vc == None or not voice.is_connected()):
+            #    voice.disconnect()
         else: 
             self.state = False 
 

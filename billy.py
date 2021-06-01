@@ -25,10 +25,7 @@ async def on_ready():
 async def play(ctx, arg):
         controller = music_controller() 
         content = controller.get_info(arg) 
-        print(content)
         controller.add_to_queue(content) 
-        print('gothere')
-        
         if not(controller.check_state()):
             print('gothere') 
             await controller.play_song(ctx, client)
@@ -64,8 +61,6 @@ async def sam(ctx, arg):
 async def subway(ctx, arg):
         if (arg == 'top'): 
             content = await get_topS() 
-            print(content)
-            print('i got here')
             embed=discord.Embed(title=content[0][1], url=content[0][0], description='u/' + content[0][2], color=0xFF5733)
             embed.set_image(url=content[0][0])
             await ctx.send(embed=embed)           
