@@ -1,26 +1,52 @@
 import os 
 import discord
-
+from discord.ext import commands 
 from dotenv import load_dotenv
+from music_controller import music_controller
+from idk import get_newest, get_top 
 
 load_dotenv() 
 TOKEN = 'ODQ5MTIzMzg4NTY2Nzk4MzY4.YLWlxw.pyJX_ePIxIP9ynOAWQHijndJ450'
 
-client = discord.Client() 
+client = commands.Bot(command_prefix="#")
+
+song_queue = {} 
+
+
 
 
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-            
-    elif message.content == ('!b'):
-        await message.channel.send("bill gates ain't no spot up shooter he aint gotta run to the corner to shoot like hes some 3rd option bitch this aint jj redick this is a fuckin god human steph curry come again only this time hes not a fuckin pussy pull up from the fuckin logo and fight you at the same time")
 
+            
+@client.command()
+async def play(ctx, arg):
+        controller = music_controller() 
+        content = controller.get_info(arg) 
+        print(content)
+        controller.add_to_queue(content) 
+        print('gothere')
+        
+        if not(controller.check_state()):
+            print('gothere') 
+            await controller.play_song(ctx, client)
+
+
+@client.command()
+async def bill(ctx, arg):
+        if (arg == 'top'): 
+            content = get_top() 
+            print(content)
+            embed=discord.Embed(title=content[0][1], url=content[0][0], description='u/' + content[0][2], color=0xFF5733)
+            embed.set_image(url=content[0][0])
+            await ctx.send(embed=embed)           
+
+        elif (arg == 'new'): 
+            content = get_newest()  
+            embed=discord.Embed(title=content[0][1], url=content[0][0], description="This is an embed that will show how to build an embed and the different components", image=content[0][0], color=0xFF5733)
+            await ctx.send(embed=embed)       
 
 
 
