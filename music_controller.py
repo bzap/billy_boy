@@ -23,8 +23,8 @@ class music_controller():
     def get_queue_size(self): 
         return len(self.song_queue)
 
-    def stop_music(self): 
-        self.vc.stop()
+    async def stop_music(self, ctx): 
+        await ctx.guild.voice_client.disconnect()
 
     def get_current_info(self): 
         return self.song_queue

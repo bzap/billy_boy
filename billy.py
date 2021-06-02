@@ -52,11 +52,9 @@ async def skip(ctx):
 
 
 
-#@client.command()
-#async def stop(ctx):
-#        if (controller.check_state()):
-#            controller.stop_music()
-#            await controller.play_song(ctx, client)     
+@client.command()
+async def stop(ctx):
+        await controller.stop_music(ctx)  
 
 
 
