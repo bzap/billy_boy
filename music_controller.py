@@ -2,6 +2,7 @@ from math import e
 import discord 
 from discord.ext import commands 
 from youtube_dl import YoutubeDL 
+import youtube_dl
 
 class music_controller(): 
     def __init__(self):  
@@ -25,9 +26,11 @@ class music_controller():
     def stop_music(self): 
         self.vc.stop()
 
+    def get_current_info(self): 
+        return self.song_queue
 
     def get_info(self, info): 
-        yt = YoutubeDL({'format': 'bestaudio', 'noplaylist':'True', 'match_filter' : '!is_live'})
+        yt = YoutubeDL({'format': 'bestaudio', 'noplaylist':'True', })
         try: 
             yt_details = yt.extract_info("ytsearch:%s" % info, download = False)['entries'][0]
         except Exception: 
@@ -35,7 +38,9 @@ class music_controller():
 
         url = yt_details.get("url", None)
         title = yt_details.get("title", None)
-        self.song_info = [url, title]
+        thumbnail = yt_details.get("thumbnail", None)
+        duration = yt_details.get("duration", None)
+        self.song_info = [url, title, thumbnail, duration]
         return self.song_info
         
     def next_song(self): 
@@ -54,7 +59,7 @@ class music_controller():
             self.state = True 
             url = self.song_queue[0][0]
             print(len(self.song_queue))
-            if (ctx.voice_client and len(self.song_queue) <= 1): 
+            if (ctx.voice_client and len(self.song_queue) == 0): 
                 await ctx.guild.voice_client.disconnect()
 
 

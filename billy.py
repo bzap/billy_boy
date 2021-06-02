@@ -1,6 +1,7 @@
 import os 
 import discord
 from discord.ext import commands 
+from datetime import timedelta
 from dotenv import load_dotenv
 from music_controller import music_controller
 from idk import get_newest, get_top, get_topS, get_newestS
@@ -29,12 +30,26 @@ async def play(ctx, arg):
         if not(controller.check_state()):
             print('gothere') 
             await controller.play_song(ctx, client)
+            print(content) 
+            embed=discord.Embed(title=content[1], color=0xFF5733)
+            embed.set_thumbnail(url=content[2])
+            embed.add_field(name='Duration: ', value=str(timedelta(seconds = int(content[3]))), inline=True)
+            embed.add_field(name='Queue: ', value=str(controller.get_queue_size()), inline=True)
+            await ctx.send(embed=embed) 
+        else: 
+            await ctx.send('added to queue xoxo')  
+            embed=discord.Embed(title=content[1], color=0xFF5733)
+            embed.set_thumbnail(url=content[2])
+            embed.add_field(name='Duration: ', value=str(timedelta(seconds = int(content[3]))), inline=True)
+            embed.add_field(name='Queue: ', value=str(controller.get_queue_size()), inline=True)
+            await ctx.send(embed=embed)  
 
 @client.command()
 async def skip(ctx):
         if (controller.check_state()):
             controller.stop_music()
-            await controller.play_song(ctx, client)     
+            await controller.play_song(ctx, client)    
+
 
 
 #@client.command()
